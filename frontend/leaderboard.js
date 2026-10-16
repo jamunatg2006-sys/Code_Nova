@@ -5,10 +5,11 @@
  * ============================================================================
  */
 
-// Dynamically determine backend base URL
-const API_BASE_URL = (window.location.port === '5000' || window.location.hostname.includes('onrender') || window.location.hostname.includes('railway'))
-    ? '/api'
-    : `http://${window.location.hostname || 'localhost'}:5000/api`;
+// Dynamically determine backend base URL:
+// When running on any hosted domain (Vercel, Render, Railway, or port 5000), use relative '/api'
+// In local development using a separate static server (e.g. Live Server on port 5500), fallback to localhost:5000
+const isLocalSeparateServer = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port !== '5000';
+const API_BASE_URL = isLocalSeparateServer ? 'http://localhost:5000/api' : '/api';
 
 /**
  * SPA Page Navigation Manager
