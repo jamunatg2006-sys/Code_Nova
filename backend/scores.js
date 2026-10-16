@@ -3,11 +3,10 @@ const router = express.Router();
 const { submitScore, getLeaderboard } = require('./scoreController');
 
 /**
- * Neon Memory — Mind Flip Scores API Routes
+ * OopsieFlip Scores API Routes
  * Base route: /api/scores
  * 
  * ============================================================================
- * SECURITY NOTICE REGARDING CLIENT-SIDE CHEATING:
  * Submitting scores calculated exclusively in client-side JavaScript (browser)
  * cannot be guaranteed to be cheat-proof. Any tech-savvy user can inspect network
  * traffic, tamper with memory, or send fabricated POST requests.
