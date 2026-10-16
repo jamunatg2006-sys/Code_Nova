@@ -1,152 +1,175 @@
-# 🧠 OopsieFlip 🎮
+# OopsieFlip
 
-> **Flip it. Match it. Don't make an Oopsie!** ⚡  
-> A fast-paced, brain-tickling cyberpunk memory game where every mismatch is a fun *oopsie*, and every winning streak lands you right at the top of the global leaderboard! 🏆
+> An interactive neon memory matching game with real-time score tracking, browser-native audio synthesis, and a persistent global leaderboard powered by MongoDB Atlas.
 
 ---
 
-## 🌟 What is OopsieFlip?
+## Overview
 
-**OopsieFlip** is an addictive, neon-inspired web game designed to test your memory, concentration, and speed. Whether you have 2 minutes to spare on your phone or want to battle your friends for the #1 spot on laptop, OopsieFlip delivers a smooth, thrilling arcade experience!
+**OopsieFlip** is a full-stack web application designed to deliver an engaging memory matching game experience. Players test their recall speed against a dynamic timer and move counter across a responsive 3D card grid. 
 
-### ✨ Why It's Fun:
-* **⚡ Neon-Powered 3D Cards**: Cards smoothly flip in 3D with glowing neon cyber aesthetics that pulse on matches and shake on mismatches.
-* **🔊 Built-In Sound Synthesizer**: Uses the Web Audio API to create real-time sci-fi sound effects — crisp flip blips, cheerful match chords, and an epic victory fanfare with zero external audio downloads!
-* **🎯 3 Exciting Challenge Modes**:
+Completed game sessions are validated on the backend and stored in a persistent MongoDB database, updating a ranked global leaderboard in real time.
+
+### Key Highlights
+* **3D Card Flip Mechanics**: Perspective card flips built with CSS transforms, featuring neon accent glow on matches and animated shake feedback on mismatches.
+* **Browser-Native Audio**: Real-time sound synthesis using the Web Audio API for flip blips, match chords, and victory chimes without external audio assets.
+* **Challenge Modes**:
   - 🟢 **Easy (8 Cards / 4 Pairs)** — Quick and breezy warm-up!
   - 🔵 **Medium (16 Cards / 8 Pairs)** — The sweet spot for memory masters.
-  - 🔴 **Hard (24 Cards / 12 Pairs)** — Intense high-speed concentration test!
-* **🏆 Live Global Cyber Leaderboard**: Every finished game is automatically recorded in MongoDB Atlas. See your name on the Top 3 Champion Podium (🥇, 🥈, 🥉), filter by difficulty, and spot your own record highlighted with a `YOU` badge!
-* **📱 100% Mobile & Laptop Friendly**: Responsive touch controls with zero mobile lag, clean single-page tabs, and high-contrast typography that is easy on the eyes.
+  - 🔴 **Hard (24 Cards / 12 Pairs)** — Intense high-speed concentration test.
+* **Persistent Leaderboard**: Live rankings fetched via REST endpoints, featuring top-three podium highlights, difficulty filtering, pagination, and player rank identification.
+* **Responsive Architecture**: Multi-page single-page application (SPA) layout optimized for mobile smartphones, tablets, and laptops.
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
-| Layer | Technologies Used |
+| Layer | Technologies |
 | :--- | :--- |
-| **Frontend** | Vanilla HTML5 (Single-Page App Navigation), CSS3 (Cyberpunk Neon Theme & 3D Transforms), JavaScript (ES6+) |
-| **Backend** | Node.js, Express.js REST API with automated routing & error handling |
-| **Database** | MongoDB Atlas (Native `mongodb` Driver with connection pooling & compound indexing) |
-| **Audio** | Native Web Audio API Synthesizer (Zero external mp3 files required) |
-| **Testing** | Built-in Automated Unit & HTTP Integration Test Runner (24 test assertions) |
+| **Frontend** | HTML5 (SPA Navigation), CSS3 (Cyberpunk Neon Theme & 3D Transforms), Vanilla JavaScript (ES6+) |
+| **Backend** | Node.js, Express.js REST API |
+| **Database** | MongoDB Atlas (Native MongoDB Node.js Driver with connection pooling & compound indexes) |
+| **Audio** | Native Web Audio API |
+| **Testing** | Automated unit and HTTP integration test runner (24 test assertions) |
 
 ---
 
-## 🎮 How the Game Works
+## System Architecture
 
 ```mermaid
 flowchart LR
-    A["1. Enter Nickname & Choose Difficulty"] --> B["2. Flip 3D Neon Cards"]
-    B --> C{"Match Found?"}
-    C -- Yes --> D["Cards Lock Open & Glow Green!"]
-    C -- No --> E["Cards Shake & Flip Back (Oopsie!)"]
-    D --> F{"All Pairs Matched?"}
-    E --> B
-    F -- Yes --> G["🎉 Auto-Saved to MongoDB Leaderboard!"]
+    Browser["Client (Vanilla JS / Web Audio)"] -->|HTTP REST| Express["Express Server (Port 5000)"]
+    Express -->|Input Validation| DAO["Score DAO (Score.js)"]
+    DAO -->|Driver Pooling| Mongo[("MongoDB Atlas Database")]
 ```
-
-1. **Enter your operative nickname** (e.g. `CyberNinja`, `jam`).
-2. **Select your difficulty** and hit **▶ START MISSION**.
-3. **Flip two cards at a time**. Match pairs as fast as you can with minimal moves to maximize your score!
-4. **Instant Auto-Save**: When you match the last pair, your score is automatically calculated and registered on the live MongoDB leaderboard in real time!
 
 ---
 
-## 🚀 Quick Start Guide
+## Getting Started
 
-### 1. Prerequisites
-Make sure **Node.js (v18+)** is installed.
+### Prerequisites
+* **Node.js (v18 or higher)**
+* **npm (v9 or higher)**
 
-### 2. Clone & Install Dependencies
+### 1. Installation
+Clone the repository and install project dependencies:
 ```bash
 git clone https://github.com/jamunatg2006-sys/Code_Nova.git
 cd Code_Nova
 npm install
 ```
 
-### 3. Configure Environment Variables
-Copy `.env.example` to `.env` and add your database configuration:
+### 2. Environment Setup
+Configure your `.env` file in the project root:
 ```env
 PORT=5000
-MONGODB_URI=your_mongodb_atlas_connection_string
+MONGODB_URI=your_mongodb_connection_string
 DB_NAME=neon_memory_db
 CLIENT_ORIGIN=*
 ```
 
-### 4. Run OopsieFlip
+### 3. Start the Server
+Start the Express server (serves both API and frontend):
 ```bash
 npm start
 ```
-Then open your browser to:  
-👉 **`http://localhost:5000`**
+Open your browser and navigate to:
+```
+http://localhost:5000
+```
 
-### 5. Run Automated Tests
+### 4. Run Test Suite
+Execute the automated validation and database integration tests:
 ```bash
 npm test
 ```
-*(Runs 24 automated assertions validating payload boundaries, HTTP status codes, and live MongoDB persistence).*
 
 ---
 
-## 📡 REST API Reference
+## REST API Specification
 
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `GET` | `/api/health` | Server uptime & MongoDB connection health monitor |
-| `GET` | `/api/scores/leaderboard` | Retrieve paginated high scores (supports `?difficulty=...&page=1&limit=10`) |
-| `POST` | `/api/scores` | Auto-submits `{ nickname, score, moves, timeTaken, difficulty }` |
+### 1. Health Check
+* **Endpoint**: `GET /api/health`
+* **Response**: Server uptime, operational status, and MongoDB connectivity state.
+
+### 2. Retrieve Leaderboard
+* **Endpoint**: `GET /api/scores/leaderboard`
+* **Query Parameters**:
+  - `difficulty` *(optional)*: `Easy`, `Medium`, or `Hard`
+  - `limit` *(optional)*: Results per page (default: `10`, max: `100`)
+  - `page` *(optional)*: Page number for pagination (default: `1`)
+* **Sorting Rule**: Ranked primarily by highest score (`score: -1`), with lower completion time (`timeTaken: 1`) as tie-breaker.
+
+### 3. Submit Score
+* **Endpoint**: `POST /api/scores`
+* **Headers**: `Content-Type: application/json`
+* **Payload**:
+  ```json
+  {
+    "nickname": "CyberAce",
+    "score": 1450,
+    "moves": 16,
+    "timeTaken": 32.5,
+    "difficulty": "Medium"
+  }
+  ```
+* **Validation**:
+  - `nickname`: String, 2–20 characters, alphanumeric with spaces, underscores, and hyphens.
+  - `score`: Non-negative integer.
+  - `moves`: Positive integer ($\ge 1$).
+  - `timeTaken`: Float or integer in seconds ($> 0$).
+  - `difficulty`: One of `Easy`, `Medium`, or `Hard`.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 OopsieFlip/
 ├── backend/
-│   ├── server.js               # Express application & static frontend server
+│   ├── server.js               # Express application setup & static asset serving
 │   ├── db.js                   # MongoDB Atlas connection manager with pooling
-│   ├── Score.js                # Score model, validation rules & compound indexes
-│   ├── scoreController.js      # Leaderboard query & submission handlers
-│   ├── scores.js               # Express API routing for /api/scores
+│   ├── Score.js                # Data access object, validation rules & compound indexes
+│   ├── scoreController.js      # Controller logic for score submission and leaderboard
+│   ├── scores.js               # Express router for /api/scores endpoints
 │   └── tests/
-│       └── test_validation.js # 24 automated unit & integration tests
+│       └── test_validation.js # Automated test runner (24 unit & integration assertions)
 │
 ├── frontend/
-│   ├── index.html              # Multi-page layout (Play, Leaderboard, Rules, About)
-│   ├── style.css               # Neon visual theme, 3D animations & mobile responsiveness
-│   ├── game.js                 # Core memory card flip mechanics, audio engine & timer
+│   ├── index.html              # Semantic multi-page structure (Play, Leaderboard, Rules, About)
+│   ├── style.css               # Neon visual design, 3D card flip styles & responsive queries
+│   ├── game.js                 # Memory matching engine, timer, scoring, and Web Audio synth
 │   └── leaderboard.js          # REST API communication, podium rendering & pagination
 │
 ├── .env.example                # Template for environment configuration
-├── package.json                # Project dependencies & scripts
+├── package.json                # Project dependencies, scripts, and metadata
 └── README.md                   # Project documentation
 ```
 
 ---
 
-## 👥 Team & Contribution Breakdown
+## Team & Contribution Breakdown
 
-This project was built collaboratively by **Team Code Nova**:
+This project was developed by **Team Code Nova**:
 
-### 🌟 Jamuna T G — Project Lead & Full-Stack Architect *(Main Person)*
-* **Architecture & Backend**: Designed and built the complete Express.js server, REST API endpoints, centralized error handling, and static client hosting.
-* **Database & Security**: Configured MongoDB Atlas connection pooling, robust payload sanitization/validation, and database compound indexes.
-* **Full-Stack Integration**: Integrated frontend with backend APIs, handled cross-origin requests, and engineered the real-time Web Audio synthesizer.
-* **Game Logic & Refinements**: Designed the smart scoring formula, auto-submission flow, personal operative banners, and overall user journey.
-* **DevOps & QA**: Built the 24-assertion automated test suite, GitHub repository coordination, and deployment configuration.
+### Jamuna T G — Project Lead & Full-Stack Integration
+* Designed the complete backend architecture, Express routing, centralized error handling, and static client serving.
+* Configured MongoDB Atlas connection pooling, data validation rules, and compound indexing.
+* Implemented full-stack integration, dynamic client-server communication, and the browser-native Web Audio synthesizer.
+* Designed the core scoring formula, automatic score submission flow, and personal operative banners.
+* Authored the automated test runner (24 assertions) and managed GitHub workflow coordination.
 
-### 🎨 Niharika Patil — Frontend UI/UX
-* Created the initial markup structure in `frontend/index.html`.
-* Designed the core neon styling, color palette, and layout elements in `frontend/style.css`.
+### Niharika Patil — Frontend UI/UX Design
+* Structured the web page layout and semantic markup in `frontend/index.html`.
+* Designed the core neon styling, visual color palette, and layout elements in `frontend/style.css`.
 
-### 🏆 Jaithra Sree Ram — Leaderboard Integration
-* Implemented leaderboard rendering, podium structure, and table display in `frontend/leaderboard.js`.
-* Assisted with leaderboard difficulty filtering and API integration.
+### Jaithra Sree Ram — Leaderboard & Client API Integration
+* Built leaderboard UI rendering, podium layout, and ranking table display in `frontend/leaderboard.js`.
+* Implemented client-side API communication, difficulty filter switching, and score pagination.
 
-### 🃏 Diksha — Game Mechanics
-* Contributed to the card flipping, deck shuffling, and pair-matching mechanics in `frontend/game.js`.
-* Assisted with move counter tracking and elapsed timer logic.
+### Diksha — Game Mechanics & Logic
+* Implemented card generation, shuffle algorithm, and pair-matching mechanics in `frontend/game.js`.
+* Developed move counter tracking and elapsed countdown/timer logic.
 
 ---
 
