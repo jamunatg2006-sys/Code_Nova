@@ -1,7 +1,7 @@
 {
-  "name": "neon-memory-mind-flip",
+  "name": "oopsieflip",
   "version": "1.0.0",
-  "description": "Neon Memory - Mind Flip: Interactive neon-themed memory card game with backend score tracking and leaderboard",
+  "description": "OopsieFlip: Interactive neon-themed memory card game with backend score tracking and leaderboard",
   "main": "backend/server.js",
   "scripts": {
     "start": "node backend/server.js",
