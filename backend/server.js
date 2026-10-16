@@ -35,6 +35,21 @@ app.use(express.urlencoded({ extended: true }));
 // API ROUTES
 // ============================================================================
 
+// Ensure database connection for API routes (supports both long-running and serverless environments)
+app.use('/api', async (req, res, next) => {
+  if (!isDBConnected()) {
+    try {
+      const db = await connectDB();
+      if (db) {
+        await Score.ensureIndexes(db);
+      }
+    } catch (e) {
+      console.error('Failed to auto-connect MongoDB:', e.message);
+    }
+  }
+  next();
+});
+
 /**
  * Health Check Endpoint
  * GET /api/health
