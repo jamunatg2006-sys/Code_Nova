@@ -159,15 +159,15 @@ This project was developed by **Team Code Nova**:
 * Designed the core scoring formula, automatic score submission flow, and personal operative banners.
 * Authored the automated test runner (24 assertions) and managed GitHub workflow coordination.
 
-### Niharika Patil — Frontend UI/UX Design
+### Niharika Patil — Frontend Design
 * Structured the web page layout and semantic markup in `frontend/index.html`.
 * Designed the core neon styling, visual color palette, and layout elements in `frontend/style.css`.
 
-### Jaithra Sree Ram — Leaderboard & Client API Integration
+### Jaithra Sree Ram — Leaderboard logic
 * Built leaderboard UI rendering, podium layout, and ranking table display in `frontend/leaderboard.js`.
 * Implemented client-side API communication, difficulty filter switching, and score pagination.
 
-### Diksha — Game Mechanics & Logic
+### Diksha — Game Logic
 * Implemented card generation, shuffle algorithm, and pair-matching mechanics in `frontend/game.js`.
 * Developed move counter tracking and elapsed countdown/timer logic.
 
