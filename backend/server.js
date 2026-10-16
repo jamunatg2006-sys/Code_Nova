@@ -43,7 +43,7 @@ app.get('/api/health', (req, res) => {
   const dbConnected = isDBConnected();
   res.status(200).json({
     status: 'ok',
-    message: 'Neon Memory — Mind Flip API is active',
+    message: 'OopsieFlip API is active',
     timestamp: new Date().toISOString(),
     uptime: Math.round(process.uptime() * 100) / 100,
     database: dbConnected ? 'connected' : 'disconnected',
@@ -53,6 +53,9 @@ app.get('/api/health', (req, res) => {
 
 // Mount Scores API routes under /api/scores
 app.use('/api/scores', scoreRoutes);
+
+// Serve frontend static files
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 // ============================================================================
 // ERROR HANDLING & 404 NOT FOUND
@@ -102,15 +105,25 @@ async function startServer() {
     console.log('ℹ️ Server starting without active MongoDB connection (DB-dependent routes will return 503 until configured).');
   }
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     server = app.listen(PORT, () => {
       console.log(`====================================================`);
-      console.log(`🚀 Neon Memory Backend running on port ${PORT}`);
-      console.log(`📡 Health Check: http://localhost:${PORT}/api/health`);
-      console.log(`🏆 Leaderboard:  http://localhost:${PORT}/api/scores/leaderboard`);
-      console.log(`🌐 CORS Origin: ${allowedOrigin}`);
+      console.log(`🚀 OopsieFlip Server is ACTIVE & RUNNING!`);
+      console.log(`🎮 Play the Game: http://localhost:${PORT}`);
+      console.log(`📡 API Health:    http://localhost:${PORT}/api/health`);
+      console.log(`🏆 Leaderboard:   http://localhost:${PORT}/api/scores/leaderboard`);
       console.log(`====================================================`);
+      console.log(`ℹ️ The server is running live. Keep this window open!`);
+      console.log(`👉 Open http://localhost:${PORT} in your browser to play.`);
       resolve(server);
+    });
+
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error(`❌ Port ${PORT} is already in use by another process.`);
+        console.error(`💡 Tip: Close the other process or run 'Stop-Process -Name node -Force' in PowerShell.`);
+      }
+      reject(err);
     });
   });
 }
