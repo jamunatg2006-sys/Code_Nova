@@ -3,109 +3,411 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neon Gaming Zone</title>
+    <title>OopsieFlip 🧠🎮</title>
+    <!-- Crisp Google Fonts: Orbitron for Sci-Fi Headers/Digits, Inter for High-Contrast Readable Text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <nav class="navbar">
-        <h2 class="logo">NEON<span>PLAY</span></h2>
-        <div class="nav-links">
-            <a href="#home">Home</a>
-            <a href="#games">Games</a>
-             <a href="./about.html">About</a>
-        </div>
-    </nav>
-
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <p class="tagline">WELCOME TO THE NEXT LEVEL</p>
-            <h1>A New Level of<br>
-                <span>Infinite Possibilities</span>
-            </h1>
-            <p class="description">
-                Challenge yourself, explore new games,
-                and prove that you are the ultimate player.
-            </p>
-            <a href="#games" class="play-btn">Play Now ↗</a>
-        </div>
-        <div class="hero-circle">🎮</div>
-    </section>
-
-    <section class="games" id="games">
-        <p class="tagline">CHOOSE YOUR CHALLENGE</p>
-        <h2>Select Your <span>Difficulty</span></h2>
-
-        <div class="game-grid">
-            <div class="game-card easy">
-                <div class="game-icon">🌟</div>
-                <h3>Easy Mode</h3>
-                <p>Perfect for beginners. Start your journey!</p>
-                <button onclick="startGame('Easy')">Play Easy</button>
+    <!-- TOP NAVIGATION BAR -->
+    <header class="app-navbar">
+        <div class="nav-container">
+            <div class="brand" onclick="Navigation.showPage('game')">
+                <span class="brand-logo">🧠</span>
+                <div class="brand-info">
+                    <span class="brand-title">OOPSIE<span class="neon-pink">FLIP</span></span>
+                    <span class="brand-subtitle">MIND FLIP 🎮</span>
+                </div>
             </div>
 
-            <div class="game-card medium">
-                <div class="game-icon">⚡</div>
-                <h3>Medium Mode</h3>
-                <p>Test your skills with a bigger challenge.</p>
-                <button onclick="startGame('Medium')">Play Medium</button>
-            </div>
+            <!-- Page Navigation Tabs -->
+            <nav class="nav-links">
+                <button class="nav-tab active" data-page="game" onclick="Navigation.showPage('game')">
+                    <span class="nav-icon">🎮</span>
+                    <span>Play Game</span>
+                </button>
+                <button class="nav-tab" data-page="leaderboard" onclick="Navigation.showPage('leaderboard')">
+                    <span class="nav-icon">🏆</span>
+                    <span>Leaderboard</span>
+                </button>
+                <button class="nav-tab" data-page="rules" onclick="Navigation.showPage('rules')">
+                    <span class="nav-icon">📜</span>
+                    <span>How to Play</span>
+                </button>
+                <button class="nav-tab" data-page="about" onclick="Navigation.showPage('about')">
+                    <span class="nav-icon">ℹ️</span>
+                    <span>About</span>
+                </button>
+            </nav>
 
-            <div class="game-card hard">
-                <div class="game-icon">🔥</div>
-                <h3>Hard Mode</h3>
-                <p>Only the brave can conquer this level!</p>
-                <button onclick="startGame('Hard')">Play Hard</button>
+            <!-- Quick Controls (Status & Audio) -->
+            <div class="nav-controls">
+                <div id="server-status" class="status-pill checking" title="Checking Server and Database Status">
+                    <span class="status-dot"></span>
+                    <span id="server-status-text">Connecting...</span>
+                </div>
+                <button id="sound-toggle-btn" class="ctrl-icon-btn" title="Toggle Sound FX">
+                    <span id="sound-icon">🔊</span>
+                </button>
             </div>
         </div>
-    </section>
+    </header>
 
-    <footer id="about">
-        <p>© 2026 NeonPlay | Level Up Your Game</p>
-    </footer>
+    <main class="page-container">
 
+        <!-- ================================================================= -->
+        <!-- PAGE 1: PLAY GAME VIEW                                            -->
+        <!-- ================================================================= -->
+        <section id="view-game" class="page-view active">
+            
+            <!-- Setup Stage (Shown before game starts) -->
+            <div id="game-setup-panel" class="setup-card">
+                <div class="setup-header">
+                    <h2>INITIALIZE <span class="neon-cyan">OOPSIEFLIP</span></h2>
+                    <p class="setup-description">
+                        Test your memory speed against the clock. Match all neon pairs to secure your position on the global leaderboard!
+                    </p>
+                </div>
 
-/*about.html*/
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About the Game</title>
-    <link rel="stylesheet" href="./style1.css">
-</head>
-<body>
+                <div class="setup-grid">
+                    <!-- Nickname Input -->
+                    <div class="setup-field">
+                        <label for="player-nickname">
+                            <strong>Operative Nickname</strong>
+                            <span class="label-badge">Required</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="player-nickname" 
+                            maxlength="20" 
+                            placeholder="e.g. CyberNinja, NeonFox" 
+                            autocomplete="off"
+                            spellcheck="false"
+                        />
+                        <span class="field-hint">2–20 characters (letters, numbers, spaces, _ or -)</span>
+                    </div>
 
-    <section class="about">
-        <h1>About <span>Our Game</span></h1>
+                    <!-- Difficulty Selector -->
+                    <div class="setup-field">
+                        <label>
+                            <strong>Select Difficulty Level</strong>
+                            <span id="selected-diff-badge" class="diff-badge Medium">Medium Mode</span>
+                        </label>
+                        <div class="difficulty-picker">
+                            <button type="button" class="difficulty-card" data-diff="Easy">
+                                <span class="diff-tag easy-tag">EASY</span>
+                                <span class="diff-cards-count">8 Cards</span>
+                                <span class="diff-pairs">4 Matching Pairs</span>
+                                <span class="diff-multiplier">1.0× Score</span>
+                            </button>
 
-        <p>
-            Welcome to NeonPlay, an exciting gaming experience
-            designed for players who love fun, challenges, and adventure.
-        </p>
+                            <button type="button" class="difficulty-card active" data-diff="Medium">
+                                <span class="diff-tag medium-tag">MEDIUM</span>
+                                <span class="diff-cards-count">16 Cards</span>
+                                <span class="diff-pairs">8 Matching Pairs</span>
+                                <span class="diff-multiplier">1.5× Score</span>
+                            </button>
 
-        <p>
-            Our game offers different difficulty levels, allowing
-            beginners and experienced players to enjoy the challenge
-            at their own pace.
-        </p>
+                            <button type="button" class="difficulty-card" data-diff="Hard">
+                                <span class="diff-tag hard-tag">HARD</span>
+                                <span class="diff-cards-count">24 Cards</span>
+                                <span class="diff-pairs">12 Matching Pairs</span>
+                                <span class="diff-multiplier">2.0× Score</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-        <h2>What Makes Our Game Special?</h2>
+                <div class="setup-actions">
+                    <button id="start-game-btn" class="action-btn primary-btn pulse-glow">
+                        ▶ START MISSION
+                    </button>
+                    <button class="action-btn secondary-btn" onclick="Navigation.showPage('leaderboard')">
+                        🏆 View Top Scores
+                    </button>
+                </div>
+            </div>
 
-        <ul>
-            <li>🎮 Simple and user-friendly interface</li>
-            <li>⚡ Multiple difficulty levels</li>
-            <li>✨ Attractive neon design and animations</li>
-            <li>🏆 Fun challenges to test your skills</li>
-        </ul>
+            <!-- Active Game Arena (Shown when game is playing) -->
+            <div id="game-active-arena" class="game-arena hidden">
+                <!-- Heads Up Display (HUD) -->
+                <div class="game-hud-bar">
+                    <div class="hud-box">
+                        <span class="hud-title">DIFFICULTY</span>
+                        <span id="hud-difficulty" class="hud-data neon-cyan">Medium</span>
+                    </div>
+                    <div class="hud-box">
+                        <span class="hud-title">TIMER</span>
+                        <span id="hud-timer" class="hud-data neon-yellow">00:00</span>
+                    </div>
+                    <div class="hud-box">
+                        <span class="hud-title">MOVES</span>
+                        <span id="hud-moves" class="hud-data neon-pink">0</span>
+                    </div>
+                    <div class="hud-box">
+                        <span class="hud-title">PAIRS MATCHED</span>
+                        <span id="hud-pairs" class="hud-data neon-green">0 / 8</span>
+                    </div>
+                    <div class="hud-box">
+                        <span class="hud-title">LIVE SCORE</span>
+                        <span id="hud-score" class="hud-data neon-cyan">0</span>
+                    </div>
+                    <div class="hud-actions">
+                        <button id="hud-restart-btn" class="hud-btn" title="Restart this game">↺ Restart</button>
+                        <button id="hud-quit-btn" class="hud-btn quit" title="Exit to setup">✕ Exit</button>
+                    </div>
+                </div>
 
-        <a href="index.html" class="back-btn">Back to Home</a>
-    </section>
+                <!-- Memory Card Grid Container -->
+                <div class="board-wrapper">
+                    <div id="game-board" class="game-board grid-medium">
+                        <!-- Injected dynamically by game.js -->
+                    </div>
+                </div>
+            </div>
+        </section>
 
-</body>
-</html>
-    
+        <!-- ================================================================= -->
+        <!-- PAGE 2: CYBER LEADERBOARD VIEW                                    -->
+        <!-- ================================================================= -->
+        <section id="view-leaderboard" class="page-view">
+            <div class="leaderboard-page-card">
+                
+                <div class="leaderboard-header">
+                    <div>
+                        <h2>CYBER <span class="neon-pink">LEADERBOARD</span> 🏆</h2>
+                        <p class="leaderboard-subtitle">Live rankings synced from persistent MongoDB database</p>
+                    </div>
+                    <div class="leaderboard-top-actions">
+                        <span id="total-operatives-count" class="count-pill">Records: Loading...</span>
+                        <button id="refresh-leaderboard-btn" class="action-btn secondary-btn small-btn">
+                            🔄 Refresh Now
+                        </button>
+                    </div>
+                </div>
 
-    <script src="script.js"></script>
+                <!-- Personal Operative Status Banner -->
+                <div id="user-leaderboard-banner" class="user-banner"></div>
+
+                <!-- Difficulty Filter Tabs -->
+                <div class="leaderboard-filters-bar">
+                    <span class="filter-label">Filter Difficulty:</span>
+                    <div class="filter-pills">
+                        <button class="filter-pill active" data-filter="">All Scores</button>
+                        <button class="filter-pill" data-filter="Easy">Easy (8 Cards)</button>
+                        <button class="filter-pill" data-filter="Medium">Medium (16 Cards)</button>
+                        <button class="filter-pill" data-filter="Hard">Hard (24 Cards)</button>
+                    </div>
+                </div>
+
+                <!-- Top 3 Podium Cards -->
+                <div class="podium-section">
+                    <!-- Rank 2 (Silver) -->
+                    <div class="podium-card rank-silver">
+                        <div class="podium-rank-tag">🥈 2nd Place</div>
+                        <div class="podium-avatar-circle" id="podium-avatar-2">-</div>
+                        <h4 class="podium-player" id="podium-name-2">---</h4>
+                        <div class="podium-score-val" id="podium-score-2">0 pts</div>
+                        <div class="podium-meta-info" id="podium-meta-2">0s | 0 moves</div>
+                    </div>
+
+                    <!-- Rank 1 (Gold Champion) -->
+                    <div class="podium-card rank-gold">
+                        <div class="gold-crown">👑</div>
+                        <div class="podium-rank-tag gold-tag">🥇 Champion #1</div>
+                        <div class="podium-avatar-circle gold-avatar" id="podium-avatar-1">-</div>
+                        <h3 class="podium-player gold-player" id="podium-name-1">---</h3>
+                        <div class="podium-score-val gold-score" id="podium-score-1">0 pts</div>
+                        <div class="podium-meta-info" id="podium-meta-1">0s | 0 moves</div>
+                    </div>
+
+                    <!-- Rank 3 (Bronze) -->
+                    <div class="podium-card rank-bronze">
+                        <div class="podium-rank-tag">🥉 3rd Place</div>
+                        <div class="podium-avatar-circle" id="podium-avatar-3">-</div>
+                        <h4 class="podium-player" id="podium-name-3">---</h4>
+                        <div class="podium-score-val" id="podium-score-3">0 pts</div>
+                        <div class="podium-meta-info" id="podium-meta-3">0s | 0 moves</div>
+                    </div>
+                </div>
+
+                <!-- Full Top Scores Table -->
+                <div class="table-container">
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Operative</th>
+                                <th>Score</th>
+                                <th>Time Taken</th>
+                                <th>Moves</th>
+                                <th>Difficulty</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-rows">
+                            <tr>
+                                <td colspan="7" class="table-msg">📡 Contacting game server...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination Footer -->
+                <div class="pagination-footer">
+                    <button id="lb-prev-btn" class="page-nav-btn" disabled>◀ Previous</button>
+                    <span id="lb-page-info" class="page-indicator">Page 1 of 1</span>
+                    <button id="lb-next-btn" class="page-nav-btn" disabled>Next ▶</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- PAGE 3: HOW TO PLAY & RULES VIEW                                  -->
+        <!-- ================================================================= -->
+        <section id="view-rules" class="page-view">
+            <div class="content-page-card">
+                <div class="content-header">
+                    <h2>MISSION <span class="neon-cyan">RULES & SCORING</span> 📜</h2>
+                    <p class="content-sub">Everything you need to master OopsieFlip and climb the leaderboard.</p>
+                </div>
+
+                <div class="rules-grid">
+                    <div class="rule-box">
+                        <div class="rule-icon">🃏</div>
+                        <h3>1. The Gameplay Loop</h3>
+                        <p>Enter your unique nickname and choose a challenge level. When the timer begins, click face-down cards to flip them. Flip two matching symbols in succession to lock them open!</p>
+                    </div>
+
+                    <div class="rule-box">
+                        <div class="rule-icon">⚡</div>
+                        <h3>2. Difficulty Modes</h3>
+                        <p><strong>Easy:</strong> 8 cards (4 pairs) — Great for a quick warm-up (1.0× multiplier).<br>
+                        <strong>Medium:</strong> 16 cards (8 pairs) — Balanced challenge (1.5× multiplier).<br>
+                        <strong>Hard:</strong> 24 cards (12 pairs) — Intense concentration test (2.0× multiplier).</p>
+                    </div>
+
+                    <div class="rule-box">
+                        <div class="rule-icon">🎯</div>
+                        <h3>3. Scoring Breakdown</h3>
+                        <p>Your score is calculated based on:<br>
+                        • <strong>Base Points:</strong> 300 pts per matched pair.<br>
+                        • <strong>Speed Bonus:</strong> Finishing swiftly earns high time bonuses.<br>
+                        • <strong>Move Efficiency:</strong> Unnecessary flips reduce score.<br>
+                        • <strong>Multiplier:</strong> Multiplied by your difficulty scale!</p>
+                    </div>
+
+                    <div class="rule-box">
+                        <div class="rule-icon">🏆</div>
+                        <h3>4. Leaderboard Ranking Rules</h3>
+                        <p>Scores are stored in MongoDB. Operatives with the highest scores rank first. In case of a points tie, the player with the <strong>lower completion time</strong> ranks higher!</p>
+                    </div>
+                </div>
+
+                <div class="content-actions">
+                    <button class="action-btn primary-btn" onclick="Navigation.showPage('game')">
+                        🎮 Play Now
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- PAGE 4: ABOUT PROJECT VIEW                                        -->
+        <!-- ================================================================= -->
+        <section id="view-about" class="page-view">
+            <div class="content-page-card">
+                <div class="content-header">
+                    <h2>ABOUT <span class="neon-pink">OOPSIEFLIP</span> ℹ️</h2>
+                    <p class="content-sub">Collaborative Full-Stack Project — Code Nova Team</p>
+                </div>
+
+                <div class="about-grid">
+                    <div class="tech-card">
+                        <h3>🛠️ Technology Stack</h3>
+                        <ul class="tech-list">
+                            <li><strong>Frontend:</strong> Semantic HTML5, Modular CSS3 (Neon Cyberpunk Design System), Vanilla JavaScript (ES6+).</li>
+                            <li><strong>Backend:</strong> Node.js, Express.js REST API with robust payload validation and error handling.</li>
+                            <li><strong>Database:</strong> Native MongoDB driver connecting to MongoDB Atlas cloud database with compound indexing.</li>
+                            <li><strong>Audio:</strong> Native Web Audio API synthesizer for real-time sound effects without external downloads.</li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-card">
+                        <h3>📡 Live Backend API Endpoints</h3>
+                        <ul class="api-list">
+                            <li><code>GET /api/health</code> — Health check & DB connection monitor.</li>
+                            <li><code>GET /api/scores/leaderboard</code> — Filterable, paginated high scores.</li>
+                            <li><code>POST /api/scores</code> — Validated submission of game results.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="content-actions">
+                    <button class="action-btn primary-btn" onclick="Navigation.showPage('game')">
+                        🎮 Return to Game
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===================================================================== -->
+    <!-- VICTORY MODAL                                                         -->
+    <!-- ===================================================================== -->
+    <div id="win-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <span class="victory-icon">🎉</span>
+                <h2>MISSION <span class="neon-cyan">ACCOMPLISHED!</span></h2>
+                <p>All neural memory pairs successfully aligned.</p>
+            </div>
+
+            <div class="modal-stats">
+                <div class="stat-pill highlight-pill">
+                    <span class="pill-label">FINAL SCORE</span>
+                    <span id="modal-final-score" class="pill-val neon-pink">0</span>
+                </div>
+                <div class="stat-pill">
+                    <span class="pill-label">OPERATIVE</span>
+                    <span id="modal-player-name" class="pill-val">-</span>
+                </div>
+                <div class="stat-pill">
+                    <span class="pill-label">TIME TAKEN</span>
+                    <span id="modal-time-taken" class="pill-val neon-yellow">0.0s</span>
+                </div>
+                <div class="stat-pill">
+                    <span class="pill-label">TOTAL MOVES</span>
+                    <span id="modal-moves-taken" class="pill-val neon-cyan">0</span>
+                </div>
+                <div class="stat-pill">
+                    <span class="pill-label">DIFFICULTY</span>
+                    <span id="modal-difficulty" class="pill-val neon-green">Medium</span>
+                </div>
+            </div>
+
+            <div id="modal-submission-status" class="status-msg-box"></div>
+
+            <div class="modal-buttons">
+                <button id="modal-submit-btn" class="action-btn primary-btn">
+                    🚀 Submit to Global Leaderboard
+                </button>
+                <button id="modal-leaderboard-btn" class="action-btn secondary-btn" onclick="Navigation.showPage('leaderboard'); document.getElementById('win-modal').classList.add('hidden');">
+                    🏆 View Leaderboard
+                </button>
+                <button id="modal-play-again-btn" class="action-btn text-btn">
+                    ↺ Play Another Round
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="leaderboard.js"></script>
+    <script src="game.js"></script>
 </body>
 </html>
