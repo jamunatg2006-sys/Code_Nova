@@ -1,14 +1,23 @@
 # 🧠 OopsieFlip 🎮
 
-> An interactive, neon-cyberpunk memory matching game with real-time score tracking, audio synthesis, and a persistent global leaderboard powered by MongoDB.
+> **Flip it. Match it. Don't make an Oopsie!** ⚡  
+> A fast-paced, brain-tickling cyberpunk memory game where every mismatch is a fun *oopsie*, and every winning streak lands you right at the top of the global leaderboard! 🏆
 
 ---
 
-## 🌟 Overview
+## 🌟 What is OopsieFlip?
 
-**OopsieFlip** is a responsive web-based memory card game designed with high-contrast cyberpunk neon aesthetics. Players enter an operative nickname, select a challenge level, and race against the clock to match hidden symbol pairs across a responsive 3D card grid. 
+**OopsieFlip** is an addictive, neon-inspired web game designed to test your memory, concentration, and speed. Whether you have 2 minutes to spare on your phone or want to battle your friends for the #1 spot on laptop, OopsieFlip delivers a smooth, thrilling arcade experience!
 
-Completed game results are automatically synced to a live MongoDB Atlas database, ranking players on a persistent global leaderboard by highest score and fastest completion time.
+### ✨ Why It's Fun:
+* **⚡ Neon-Powered 3D Cards**: Cards smoothly flip in 3D with glowing neon cyber aesthetics that pulse on matches and shake on mismatches.
+* **🔊 Built-In Sound Synthesizer**: Uses the Web Audio API to create real-time sci-fi sound effects — crisp flip blips, cheerful match chords, and an epic victory fanfare with zero external audio downloads!
+* **🎯 3 Exciting Challenge Modes**:
+  - 🟢 **Easy (8 Cards / 4 Pairs)** — Quick and breezy warm-up!
+  - 🔵 **Medium (16 Cards / 8 Pairs)** — The sweet spot for memory masters.
+  - 🔴 **Hard (24 Cards / 12 Pairs)** — Intense high-speed concentration test!
+* **🏆 Live Global Cyber Leaderboard**: Every finished game is automatically recorded in MongoDB Atlas. See your name on the Top 3 Champion Podium (🥇, 🥈, 🥉), filter by difficulty, and spot your own record highlighted with a `YOU` badge!
+* **📱 100% Mobile & Laptop Friendly**: Responsive touch controls with zero mobile lag, clean single-page tabs, and high-contrast typography that is easy on the eyes.
 
 ---
 
@@ -16,62 +25,67 @@ Completed game results are automatically synced to a live MongoDB Atlas database
 
 | Layer | Technologies Used |
 | :--- | :--- |
-| **Frontend** | Vanilla HTML5 (Single-Page Navigation), CSS3 (Cyberpunk Neon Theme & 3D Transforms), JavaScript (ES6+) |
-| **Backend** | Node.js, Express.js REST API |
+| **Frontend** | Vanilla HTML5 (Single-Page App Navigation), CSS3 (Cyberpunk Neon Theme & 3D Transforms), JavaScript (ES6+) |
+| **Backend** | Node.js, Express.js REST API with automated routing & error handling |
 | **Database** | MongoDB Atlas (Native `mongodb` Driver with connection pooling & compound indexing) |
-| **Audio** | Web Audio API (Synthesizes sound effects natively in-browser without external audio files) |
+| **Audio** | Native Web Audio API Synthesizer (Zero external mp3 files required) |
 | **Testing** | Built-in Automated Unit & HTTP Integration Test Runner (24 test assertions) |
 
 ---
 
-## 🎮 Gameplay & Features
+## 🎮 How the Game Works
 
-1. **Operative Setup**: Enter a unique nickname (2–20 characters) and select difficulty:
-   - **Easy Mode**: 8 Cards (4 Pairs) — 1.0× multiplier
-   - **Medium Mode**: 16 Cards (8 Pairs) — 1.5× multiplier
-   - **Hard Mode**: 24 Cards (12 Pairs) — 2.0× multiplier
-2. **3D Card Flipping**: Flip cards to discover matching neon icons. Mismatches shake and flip back after a brief pause.
-3. **Smart Scoring**: Points are computed from matched pairs, time bonuses, and move efficiency, scaled by the difficulty multiplier.
-4. **Auto-Save to Leaderboard**: Scores are automatically sent to MongoDB upon victory — zero extra buttons needed.
-5. **Interactive Leaderboard**: Filter by difficulty, view the Top 3 Podium (🥇, 🥈, 🥉), navigate with pagination, and see your own record highlighted with a `YOU` badge.
-6. **Mobile Responsive**: Fully optimized for mobile screens, tablets, and laptops.
+```mermaid
+flowchart LR
+    A["1. Enter Nickname & Choose Difficulty"] --> B["2. Flip 3D Neon Cards"]
+    B --> C{"Match Found?"}
+    C -- Yes --> D["Cards Lock Open & Glow Green!"]
+    C -- No --> E["Cards Shake & Flip Back (Oopsie!)"]
+    D --> F{"All Pairs Matched?"}
+    E --> B
+    F -- Yes --> G["🎉 Auto-Saved to MongoDB Leaderboard!"]
+```
+
+1. **Enter your operative nickname** (e.g. `CyberNinja`, `jam`).
+2. **Select your difficulty** and hit **▶ START MISSION**.
+3. **Flip two cards at a time**. Match pairs as fast as you can with minimal moves to maximize your score!
+4. **Instant Auto-Save**: When you match the last pair, your score is automatically calculated and registered on the live MongoDB leaderboard in real time!
 
 ---
 
 ## 🚀 Quick Start Guide
 
 ### 1. Prerequisites
-Ensure **Node.js (v18+)** is installed on your computer.
+Make sure **Node.js (v18+)** is installed.
 
-### 2. Installation
-Clone the repository and install dependencies:
+### 2. Clone & Install Dependencies
 ```bash
 git clone https://github.com/jamunatg2006-sys/Code_Nova.git
 cd Code_Nova
 npm install
 ```
 
-### 3. Environment Configuration
-Copy `.env.example` to create `.env`:
+### 3. Configure Environment Variables
+Copy `.env.example` to `.env` and add your database configuration:
 ```env
 PORT=5000
-MONGODB_URI=your_mongodb_connection_string
+MONGODB_URI=your_mongodb_atlas_connection_string
 DB_NAME=neon_memory_db
 CLIENT_ORIGIN=*
 ```
 
-### 4. Run the Application
-Start the backend & frontend together:
+### 4. Run OopsieFlip
 ```bash
 npm start
 ```
-Then open your browser to:
+Then open your browser to:  
 👉 **`http://localhost:5000`**
 
 ### 5. Run Automated Tests
 ```bash
 npm test
 ```
+*(Runs 24 automated assertions validating payload boundaries, HTTP status codes, and live MongoDB persistence).*
 
 ---
 
@@ -79,9 +93,9 @@ npm test
 
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| `GET` | `/api/health` | Server uptime & MongoDB connection status |
-| `GET` | `/api/scores/leaderboard` | Retrieve ranked scores (supports `?difficulty=...&page=1&limit=10`) |
-| `POST` | `/api/scores` | Submit game result `{ nickname, score, moves, timeTaken, difficulty }` |
+| `GET` | `/api/health` | Server uptime & MongoDB connection health monitor |
+| `GET` | `/api/scores/leaderboard` | Retrieve paginated high scores (supports `?difficulty=...&page=1&limit=10`) |
+| `POST` | `/api/scores` | Auto-submits `{ nickname, score, moves, timeTaken, difficulty }` |
 
 ---
 
@@ -116,10 +130,10 @@ OopsieFlip/
 This project was built collaboratively by **Team Code Nova**:
 
 ### 🌟 Jamuna T G — Project Lead & Full-Stack Architect *(Main Person)*
-* **Architecture & Backend**: Built the Express.js server, REST API endpoints, centralized error handling, and static client serving.
+* **Architecture & Backend**: Designed and built the complete Express.js server, REST API endpoints, centralized error handling, and static client hosting.
 * **Database & Security**: Configured MongoDB Atlas connection pooling, robust payload sanitization/validation, and database compound indexes.
-* **Full-Stack Integration**: Integrated frontend with backend APIs, handled cross-origin requests, and integrated Web Audio synthesizer.
-* **Game Logic & Refinements**: Designed the scoring formula, auto-submission flow, personal operative banners, and overall user journey.
+* **Full-Stack Integration**: Integrated frontend with backend APIs, handled cross-origin requests, and engineered the real-time Web Audio synthesizer.
+* **Game Logic & Refinements**: Designed the smart scoring formula, auto-submission flow, personal operative banners, and overall user journey.
 * **DevOps & QA**: Built the 24-assertion automated test suite, GitHub repository coordination, and deployment configuration.
 
 ### 🎨 Niharika Patil — Frontend UI/UX
