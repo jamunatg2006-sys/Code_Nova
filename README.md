@@ -138,7 +138,7 @@ OopsieFlip/
 ├── frontend/
 │   ├── index.html              # Semantic multi-page structure (Play, Leaderboard, Rules, About)
 │   ├── style.css               # Neon visual design, 3D card flip styles & responsive queries
-│   ├── game.js                 # Memory matching engine, timer, scoring, and Web Audio synth
+│   ├── Gamee.js                # Memory matching engine, timer, scoring, and Web Audio synth
 │   └── leaderboard.js          # REST API communication, podium rendering & pagination
 │
 ├── .env.example                # Template for environment configuration
@@ -168,7 +168,7 @@ This project was developed by **Team Code Nova**:
 * Implemented client-side API communication, difficulty filter switching, and score pagination.
 
 ### Diksha — Game Mechanics & Logic
-* Implemented card generation, shuffle algorithm, and pair-matching mechanics in `frontend/game.js`.
+* Implemented card generation, shuffle algorithm, and pair-matching mechanics in `frontend/Gamee.js`.
 * Developed move counter tracking and elapsed countdown/timer logic.
 
 ---
