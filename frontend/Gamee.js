@@ -355,6 +355,16 @@
             timeTaken: exactTimeTaken,
             difficulty: gameState.difficulty,
         };
+                // Update Achievement and Reward System
+        if (window.OopsieAchievements) {
+            window.OopsieAchievements.onGameEnd({
+                nickname: gameState.nickname,
+                difficulty: gameState.difficulty.toLowerCase(),
+                time: exactTimeTaken,
+                moves: gameState.moves,
+                score: finalScore
+            });
+        }
 
         // Save nickname in localStorage so player doesn't have to re-type it
         try { localStorage.setItem('oopsie_nickname', gameState.nickname); } catch (e) {}
